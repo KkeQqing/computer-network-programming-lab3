@@ -27,6 +27,9 @@ public class ComputerNetworkProgrammingLab3 {
 
         java.awt.EventQueue.invokeLater(() -> {
             new RPClientFrame().setVisible(true);
+            new RPClientFrame().setVisible(true);
+            new RPClientFrame().setVisible(true);
+            new RPClientFrame().setVisible(true);
         });
     }
     
