@@ -9,8 +9,8 @@ import java.util.concurrent.Executors;
 public class RPServer {
 
     private static final int PORT = 7;
-    private static final int THREAD_POOL_SIZE = 5; // 线程池大小
-    private ExecutorService executorService;
+    private static final int THREAD_POOL_SIZE = 3; // 线程池大小
+    private ExecutorService executorService; // 线程池
 
     public RPServer() {
         executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
@@ -48,25 +48,25 @@ public class RPServer {
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     PrintWriter out = new PrintWriter(socket.getOutputStream(), true)
             ) {
-                String clientChoice = in.readLine(); // 接收客户端选择
+                String clientChoice;
+                while ((clientChoice = in.readLine()) != null) {
+                    if (clientChoice.trim().isEmpty()) continue;
 
-                if (clientChoice == null) return;
+                    Thread.sleep(3000);
 
-                // 生成服务器随机选择
-                String[] choices = {"石头", "剪刀", "布"};
-                String serverChoice = choices[(int) (Math.random() * 3)];
+                    String[] choices = {"石头", "剪刀", "布"};
+                    String serverChoice = choices[(int) (Math.random() * 3)];
+                    String result = determineWinner(clientChoice, serverChoice);
 
-                // 判断胜负
-                String result = determineWinner(clientChoice, serverChoice);
+                    out.println("服务器选择：" + serverChoice);
+                    out.println(result);
 
-                // 返回结果
-                out.println("服务器选择：" + serverChoice);
-                out.println(result);
-
-                System.out.println("客户端：" + clientChoice + " vs 服务器：" + serverChoice + " → " + result);
-
+                    System.out.println("客户端：" + clientChoice + " vs 服务器：" + serverChoice + " → " + result);
+                }
             } catch (IOException e) {
                 System.err.println("处理客户端异常：" + e.getMessage());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             } finally {
                 try {
                     socket.close();
