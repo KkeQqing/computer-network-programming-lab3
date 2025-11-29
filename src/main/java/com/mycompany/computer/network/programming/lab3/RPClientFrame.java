@@ -9,8 +9,8 @@ import java.awt.event.WindowEvent;
 public class RPClientFrame extends javax.swing.JFrame {
 
     private Socket socket;
-    private PrintWriter out;
-    private BufferedReader in;
+    private PrintWriter out; // 输出流
+    private BufferedReader in; // 输入流
     private boolean isConnected = false;
 
     public RPClientFrame() {
